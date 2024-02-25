@@ -152,7 +152,21 @@ inline RenderError api_drawSprite4V(char const* name, float const x1, float cons
     }
     return api_drawSprite4V(*pimg2dres, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
 }
-
+inline RenderError api_drawSprite3D(LuaSTGPlus::IResourceSprite* pimg2dres, float const x, float const y, float const z, float const rx, float const ry, float const rz, float const sx, float const sy)
+{
+    pimg2dres->Render3D(x, y, z, rx, ry, rz, sx, sy);
+    return RenderError::None;
+}
+inline RenderError api_drawSprite3D(char const* name, float const x, float const y, float const z, float const rx, float const ry, float const rz, float const sx, float const sy)
+{
+    Core::ScopeObject<LuaSTGPlus::IResourceSprite> pimg2dres = LRESMGR().FindSprite(name);
+    if (!pimg2dres)
+    {
+        spdlog::error("[luastg] lstg.Renderer.drawSprite4V failed, can't find sprite '{}'", name);
+        return RenderError::SpriteNotFound;
+    }
+    return api_drawSprite3D(*pimg2dres, x, y, z, rx, ry, rz, sx, sy);
+}
 inline RenderError api_drawSpriteSequence(LuaSTGPlus::IResourceAnimation* pani2dres, int const ani_timer, float const x, float const y, float const rot, float const hscale, float const vscale, float const z)
 {
     pani2dres->Render(ani_timer, x, y, rot, hscale, vscale, z);
@@ -534,6 +548,16 @@ static int lib_drawSprite4V(lua_State* L)
     }
     return 0;
 }
+static int lib_drawSprite3D(lua_State* L)
+{
+    api_drawSprite3D(
+        luaL_checkstring(L, 1),
+        (float)luaL_checknumber(L, 2), (float)luaL_checknumber(L, 3), (float)luaL_checknumber(L, 4),
+        (float)(L_DEG_TO_RAD * luaL_checknumber(L, 5)), (float)(L_DEG_TO_RAD * luaL_checknumber(L, 6)), (float)(L_DEG_TO_RAD * luaL_checknumber(L, 7)),
+        (float)luaL_optnumber(L, 8, 1), (float)luaL_optnumber(L, 9, luaL_optnumber(L, 8, 1))
+    );
+    return 0;
+}
 
 static int lib_drawSpriteSequence(lua_State* L)
 {
@@ -706,6 +730,7 @@ static luaL_Reg const lib_func[] = {
     MKFUNC(drawSprite),
     MKFUNC(drawSpriteRect),
     MKFUNC(drawSprite4V),
+    MKFUNC(drawSprite3D),
 
     MKFUNC(drawSpriteSequence),
 
@@ -970,6 +995,7 @@ static luaL_Reg const lib_compat[] = {
     { "Render", &lib_drawSprite },
     { "RenderRect", &lib_drawSpriteRect },
     { "Render4V", &lib_drawSprite4V },
+    { "Render3D", &lib_drawSprite3D },
     { "RenderAnimation", &lib_drawSpriteSequence },
     { "RenderTexture", &lib_drawTexture },
     { "RenderMesh", &lib_drawMesh },
