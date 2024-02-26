@@ -16,6 +16,7 @@ extern int luaopen_socket_core(lua_State* L);
 #include "lua_steam.h"
 #include "LuaBinding/lua_xinput.hpp"
 #include "LuaBinding/lua_random.hpp"
+#include "LuaBinding/lua_particle.hpp"
 #include "LuaBinding/lua_dwrite.hpp"
 #include "LuaBinding/Resource.hpp"
 
@@ -309,6 +310,7 @@ namespace LuaSTGPlus
             lua_xinput_open(L);
             luaopen_dwrite(L);
             luaopen_random(L);
+            luaopen_particle(L);
             luaopen_utf8(L);
             luaopen_string_pack(L);
             {
