@@ -26,6 +26,8 @@ int lua_NewPool2D(lua_State* L)
         return luaL_error(L, "must provide image resource for particle system");
 
     img = LAPP.GetResourceMgr().FindSprite(luaL_checkstring(L, 1));
+    if (!img)
+        return luaL_error(L, "can't find sprite '%s'", luaL_checkstring(L, 1));
 
     if (argc >= 2)
         blend = TranslateBlendMode(L, 2);
@@ -605,6 +607,8 @@ int lua_NewPool3D(lua_State* L)
         return luaL_error(L, "must provide image resource for particle system");
 
     img = LAPP.GetResourceMgr().FindSprite(luaL_checkstring(L, 1));
+    if (!img)
+        return luaL_error(L, "can't find sprite '%s'", luaL_checkstring(L, 1));
 
     if (argc >= 2)
         blend = TranslateBlendMode(L, 2);
