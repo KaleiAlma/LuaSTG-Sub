@@ -162,7 +162,7 @@ inline RenderError api_drawSprite3D(char const* name, float const x, float const
     Core::ScopeObject<LuaSTGPlus::IResourceSprite> pimg2dres = LRESMGR().FindSprite(name);
     if (!pimg2dres)
     {
-        spdlog::error("[luastg] lstg.Renderer.drawSprite4V failed, can't find sprite '{}'", name);
+        spdlog::error("[luastg] lstg.Renderer.drawSprite3D failed, can't find sprite '{}'", name);
         return RenderError::SpriteNotFound;
     }
     return api_drawSprite3D(*pimg2dres, x, y, z, rx, ry, rz, sx, sy);
@@ -550,12 +550,16 @@ static int lib_drawSprite4V(lua_State* L)
 }
 static int lib_drawSprite3D(lua_State* L)
 {
-    api_drawSprite3D(
+    RenderError re = api_drawSprite3D(
         luaL_checkstring(L, 1),
         (float)luaL_checknumber(L, 2), (float)luaL_checknumber(L, 3), (float)luaL_checknumber(L, 4),
         (float)(L_DEG_TO_RAD * luaL_checknumber(L, 5)), (float)(L_DEG_TO_RAD * luaL_checknumber(L, 6)), (float)(L_DEG_TO_RAD * luaL_checknumber(L, 7)),
         (float)luaL_optnumber(L, 8, 1), (float)luaL_optnumber(L, 9, luaL_optnumber(L, 8, 1))
     );
+    if (re == RenderError::SpriteNotFound)
+    {
+        return luaL_error(L, "can't find sprite '%s'", luaL_checkstring(L, 1));
+    }
     return 0;
 }
 
