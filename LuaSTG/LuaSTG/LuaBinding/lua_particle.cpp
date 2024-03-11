@@ -50,7 +50,7 @@ int lua_pool2d_AddParticle(lua_State* L)
         .pos = Core::Vector2F(luaL_checknumber(L, 2), luaL_checknumber(L, 3)),
         .vel = Core::Vector2F((float)luaL_optnumber(L, 5, 0), (float)luaL_optnumber(L, 6, 0)),
         .scale = Core::Vector2F(1, 1),
-        .rot = (float)luaL_optnumber(L, 4, 0),
+        .rot = (float)(L_DEG_TO_RAD * luaL_optnumber(L, 4, 0)),
         .color = Core::Color4B(0xFFFFFFFF),
     };
 
@@ -254,7 +254,7 @@ int lua_particle2d_mtIndex(lua_State* L)
                     case 'a':
                         switch (k[5]) {
                         case '\0':
-                            lua_pushnumber(L, (*self)->omiga);
+                            lua_pushnumber(L, (*self)->omiga * L_RAD_TO_DEG);
                             return 1;
                         }
                         break;
@@ -273,7 +273,7 @@ int lua_particle2d_mtIndex(lua_State* L)
             case 't':
                 switch (k[3]) {
                 case '\0':
-                    lua_pushnumber(L, (*self)->rot);
+                    lua_pushnumber(L, (*self)->rot * L_RAD_TO_DEG);
                     return 1;
                 }
                 break;
@@ -478,7 +478,7 @@ int lua_particle2d_mtNewIndex(lua_State* L)
                     case 'a':
                         switch (k[5]) {
                         case '\0':
-                            (*self)->omiga = luaL_checknumber(L, 3);
+                            (*self)->omiga = L_DEG_TO_RAD * luaL_checknumber(L, 3);
                             return 0;
                         }
                         break;
@@ -497,7 +497,7 @@ int lua_particle2d_mtNewIndex(lua_State* L)
             case 't':
                 switch (k[3]) {
                 case '\0':
-                    (*self)->rot = luaL_checknumber(L, 3);
+                    (*self)->rot = L_DEG_TO_RAD * luaL_checknumber(L, 3);
                     return 0;
                 }
                 break;
@@ -811,13 +811,6 @@ int lua_particle3d_mtIndex(lua_State* L)
                                 return 1;
                             }
                             break;
-                        case '5':
-                            switch (k[6]) {
-                            case '\0':
-                                lua_pushnumber(L, (*self)->extra4);
-                                return 1;
-                            }
-                            break;
                         }
                         break;
                     }
@@ -840,21 +833,21 @@ int lua_particle3d_mtIndex(lua_State* L)
         case 'x':
             switch (k[2]) {
             case '\0':
-                lua_pushnumber(L, (*self)->omiga.x);
+                lua_pushnumber(L, (*self)->omiga.x * L_RAD_TO_DEG);
                 return 1;
             }
             break;
         case 'y':
             switch (k[2]) {
             case '\0':
-                lua_pushnumber(L, (*self)->omiga.y);
+                lua_pushnumber(L, (*self)->omiga.y * L_RAD_TO_DEG);
                 return 1;
             }
             break;
         case 'z':
             switch (k[2]) {
             case '\0':
-                lua_pushnumber(L, (*self)->omiga.z);
+                lua_pushnumber(L, (*self)->omiga.z * L_RAD_TO_DEG);
                 return 1;
             }
             break;
@@ -865,21 +858,21 @@ int lua_particle3d_mtIndex(lua_State* L)
         case 'x':
             switch (k[2]) {
             case '\0':
-                lua_pushnumber(L, (*self)->rot.x);
+                lua_pushnumber(L, (*self)->rot.x * L_RAD_TO_DEG);
                 return 1;
             }
             break;
         case 'y':
             switch (k[2]) {
             case '\0':
-                lua_pushnumber(L, (*self)->rot.y);
+                lua_pushnumber(L, (*self)->rot.y * L_RAD_TO_DEG);
                 return 1;
             }
             break;
         case 'z':
             switch (k[2]) {
             case '\0':
-                lua_pushnumber(L, (*self)->rot.z);
+                lua_pushnumber(L, (*self)->rot.z * L_RAD_TO_DEG);
                 return 1;
             }
             break;
@@ -1083,13 +1076,6 @@ int lua_particle3d_mtNewIndex(lua_State* L)
                                 return 1;
                             }
                             break;
-                        case '5':
-                            switch (k[6]) {
-                            case '\0':
-                                (*self)->extra4 = luaL_checknumber(L, 3);
-                                return 1;
-                            }
-                            break;
                         }
                         break;
                     }
@@ -1112,21 +1098,21 @@ int lua_particle3d_mtNewIndex(lua_State* L)
         case 'x':
             switch (k[2]) {
             case '\0':
-                (*self)->omiga.x = luaL_checknumber(L, 3);
+                (*self)->omiga.x = luaL_checknumber(L, 3) * L_DEG_TO_RAD;
                 return 1;
             }
             break;
         case 'y':
             switch (k[2]) {
             case '\0':
-                (*self)->omiga.y = luaL_checknumber(L, 3);
+                (*self)->omiga.y = luaL_checknumber(L, 3) * L_DEG_TO_RAD;
                 return 1;
             }
             break;
         case 'z':
             switch (k[2]) {
             case '\0':
-                (*self)->omiga.z = luaL_checknumber(L, 3);
+                (*self)->omiga.z = luaL_checknumber(L, 3) * L_DEG_TO_RAD;
                 return 1;
             }
             break;
@@ -1137,21 +1123,21 @@ int lua_particle3d_mtNewIndex(lua_State* L)
         case 'x':
             switch (k[2]) {
             case '\0':
-                (*self)->rot.x = luaL_checknumber(L, 3);
+                (*self)->rot.x = luaL_checknumber(L, 3) * L_DEG_TO_RAD;
                 return 1;
             }
             break;
         case 'y':
             switch (k[2]) {
             case '\0':
-                (*self)->rot.y = luaL_checknumber(L, 3);
+                (*self)->rot.y = luaL_checknumber(L, 3) * L_DEG_TO_RAD;
                 return 1;
             }
             break;
         case 'z':
             switch (k[2]) {
             case '\0':
-                (*self)->rot.z = luaL_checknumber(L, 3);
+                (*self)->rot.z = luaL_checknumber(L, 3) * L_DEG_TO_RAD;
                 return 1;
             }
             break;

@@ -27,7 +27,6 @@ namespace LuaSTGPlus::Particle
 			float extra2;
 			float extra3;
 			float extra4;
-			float extra5;
 		};
 
 		ParticlePool3D::Particle* AddParticle(ParticlePool3D::Particle p) { plist.insert(p); return plist.GetFront(); }
